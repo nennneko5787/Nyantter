@@ -20,12 +20,12 @@ class WillRegistUser(BaseModel):
 
 @router.post(
     "/api/auth/register",
-    summary="Register with Nekotter."
+    summary="Register with Nekotter.",
     response_class=JSONResponse
 )
 async def register(user: WillRegistUser):
     """
-    Register with Nekotter.
+    Register with Nekotter.  
     *This endpoint cannot be used without authentication by CAPTCHA. This means it is unavailable.
     """
     if user.password != user.password_confirm:
