@@ -11,7 +11,10 @@ class Post(BaseModel):
     id: int
     content: str
 
-@router.post("/api/letters/edit", response_class=JSONResponse)
+@router.post(
+    "/api/letters/edit",
+    response_class=JSONResponse
+)
 async def edit_letter(request: Request, letter: Post):
     token = request.headers.get("Authorization", "")
 
