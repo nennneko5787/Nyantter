@@ -12,8 +12,16 @@ class WillLoginUser(BaseModel):
     name: str
     password: str
 
-@router.post("/api/auth/login", response_class=JSONResponse)
+@router.post(
+    "/api/auth/login",
+    summary="Login with username and password",
+    response_class=JSONResponse,
+)
 async def login(user: WillLoginUser):
+    """
+    Login with your username and password.
+    **This endpoint is deprecated! Please use oAuth2 instead!**
+    """
     async with AsyncDatabaseConnection(getenv("dsn")) as conn:
         user_exists = await conn.fetchval('SELECT EXISTS(SELECT 1 FROM users WHERE name = $1)', user.name)
         if not user_exists:
