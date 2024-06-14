@@ -19,7 +19,7 @@ class WillLoginUser(BaseModel):
 )
 async def login(user: WillLoginUser):
     """
-    Login with your username and password.
+    Login with your username and password.  
     **This endpoint is deprecated! Please use oAuth2 instead!**
     """
     async with AsyncDatabaseConnection(getenv("dsn")) as conn:
