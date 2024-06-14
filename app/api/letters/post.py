@@ -15,8 +15,19 @@ class Post(BaseModel):
     replyed_to: Optional[int] = None
     relettered_to: Optional[int] = None
 
-@router.put("/api/letters/post", response_class=JSONResponse)
+@router.put(
+    "/api/letters/post",
+    summary="Post a letter."
+    response_class=JSONResponse
+)
 async def post_letter(request: Request, letter: Post):
+    """
+    Post a letter with all the infomation:
+    
+    - **content**: body of letter.
+    - **replyed_to**: If the letter you are submitting is a reply to another letter, specify the Snowflake ID for that letter here.
+    - **relettered_to**: If the letter you are submitting is a "reletter" to another letter, please specify the letter's Snowflake ID here.
+    """
     token = request.headers.get("Authorization", "")
 
     async with AsyncDatabaseConnection(getenv("dsn")) as conn:
