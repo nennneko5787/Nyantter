@@ -18,8 +18,16 @@ class WillRegistUser(BaseModel):
     password_confirm: str
     turnstile: str
 
-@router.post("/api/auth/register", response_class=JSONResponse)
+@router.post(
+    "/api/auth/register",
+    summary="Register with Nekotter."
+    response_class=JSONResponse
+)
 async def register(user: WillRegistUser):
+    """
+    Register with Nekotter.
+    *This endpoint cannot be used without authentication by CAPTCHA. This means it is unavailable.
+    """
     if user.password != user.password_confirm:
         raise HTTPException(status_code=400, detail="Passwords don't match")
 
