@@ -17,7 +17,7 @@ class Post(BaseModel):
 
 @router.put(
     "/api/letters/post",
-    summary="Post a letter."
+    summary="Post a letter.",
     response_class=JSONResponse
 )
 async def post_letter(request: Request, letter: Post):
