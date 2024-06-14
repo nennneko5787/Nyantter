@@ -22,7 +22,11 @@ async def lifespan(app: FastAPI):
     yield
     log.info("Nyantter is stopping...")
     
-app = FastAPI(lifespan=lifespan)
+app = FastAPI(
+    title="Nyantter",
+    version="v2024.06.14",
+    lifespan=lifespan
+)
 app.mount(path="/static", app=StaticFiles(directory="static"), name="static")
 
 app.include_router(nekotterstat.router)
