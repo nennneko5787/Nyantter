@@ -15,7 +15,7 @@ class Post(BaseModel):
     replyed_to: Optional[int] = None
     relettered_to: Optional[int] = None
 
-@router.put(
+@router.post(
     "/api/letters/post",
     summary="Post a letter.",
     response_class=JSONResponse
