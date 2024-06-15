@@ -11,7 +11,7 @@ class Post(BaseModel):
     id: int
     content: str
 
-@router.post(
+@router.put(
     "/api/letters/edit",
     response_class=JSONResponse
 )
