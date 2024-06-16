@@ -10,7 +10,7 @@ from app.api.letters import post
 from app.api.letters import edit
 from app.api.letters import delete
 
-from app.frontend import index
+from app import frontend
 
 log = logging.getLogger("uvicorn")
 
@@ -32,4 +32,4 @@ app.include_router(post.router)
 app.include_router(edit.router)
 app.include_router(delete.router)
 
-app.include_router(index.router)
+app.include_router(frontend.router)
