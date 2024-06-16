@@ -3,7 +3,7 @@ from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 import logging
 
-from app.api import nekotterstat
+from app.api import nyantterstat
 from app.api.auth import register
 from app.api.auth import login
 from app.api.letters import post
@@ -22,10 +22,13 @@ async def lifespan(app: FastAPI):
     yield
     log.info("Nyantter is stopping...")
     
+with open("NyantterAPISummary.md", "r") as f:
+    summary = f.read()
+
 app = FastAPI(
     title="Nyantter",
     version="2024.06.14",
-    summary="猫たちの、猫たちによる、猫たちのためのSNSです。",
+    summary=summary,
     contact={
         "name": "nennneko5787",
         "url": "http://nennneko5787.cloudfree.jp/",
@@ -39,7 +42,7 @@ app = FastAPI(
 )
 app.mount(path="/static", app=StaticFiles(directory="static"), name="static")
 
-app.include_router(nekotterstat.router)
+app.include_router(nyantterstat.router)
 app.include_router(register.router)
 app.include_router(login.router)
 app.include_router(post.router)

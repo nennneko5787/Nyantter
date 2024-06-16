@@ -21,7 +21,7 @@ class WillLoginUser(BaseModel):
 async def login(response: Response, user: WillLoginUser):
     """
     ユーザー名とパスワードを使用してログインします。
-    ※このエンドポイントは**非推奨**です！代わりに提供される予定のoAuth2を使用してください！
+    ※このエンドポイントは**非推奨**です！代わりに提供される予定のOAuth2を使用してください！
     """
     async with AsyncDatabaseConnection(getenv("dsn")) as conn:
         user_exists = await conn.fetchval('SELECT EXISTS(SELECT 1 FROM users WHERE name = $1)', user.name)
