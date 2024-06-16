@@ -3,7 +3,7 @@ import aiohttp
 
 async def verify_captcha(*, token: str, ipaddr: str) -> bool:
     data = {
-        "secret": getenv("turnstile"),
+        "secret": getenv("turnstile_secret"),
         "response": token,
         "ip": ipaddr
     }

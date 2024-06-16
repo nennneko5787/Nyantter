@@ -22,7 +22,21 @@ async def lifespan(app: FastAPI):
     yield
     log.info("Nyantter is stopping...")
     
-app = FastAPI(lifespan=lifespan)
+app = FastAPI(
+    title="Nyantter",
+    version="2024.06.14",
+    summary="猫たちの、猫たちによる、猫たちのためのSNSです。",
+    contact={
+        "name": "nennneko5787",
+        "url": "http://nennneko5787.cloudfree.jp/",
+        "email": "nennneko5787@14chan.jp",
+    },
+    license_info={
+        "name": "Apache 2.0",
+        "url": "https://www.apache.org/licenses/LICENSE-2.0.html",
+    },
+    lifespan=lifespan
+)
 app.mount(path="/static", app=StaticFiles(directory="static"), name="static")
 
 app.include_router(nekotterstat.router)
