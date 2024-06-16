@@ -10,23 +10,23 @@ from ...database import AsyncDatabaseConnection
 
 router = APIRouter()
 
-class Post(BaseModel):
+class WillPostLetter(BaseModel):
     content: str
     replyed_to: Optional[int] = None
     relettered_to: Optional[int] = None
 
 @router.post(
     "/api/letters/post",
-    summary="Post a letter.",
-    response_class=JSONResponse
+    summary="レターを「ポストボックス」に入れます。",
+    response_class=JSONResponse,
 )
-async def post_letter(request: Request, letter: Post):
+async def post_letter(request: Request, letter: WillPostLetter):
     """
-    Post a letter with all the infomation:
-    
-    - **content**: body of letter.
-    - **replyed_to**: If the letter you are submitting is a reply to another letter, specify the Snowflake ID for that letter here.
-    - **relettered_to**: If the letter you are submitting is a "reletter" to another letter, please specify the letter's Snowflake ID here.
+    以下のパラメータを指定して、レターを「ポストボックス」にいれます。  
+      
+    - **content**: レターの本文。  
+    - **replyed_to**: 返信先ポスト。  
+    - **relettered_to**: リレター先ポスト。  
     """
     token = request.headers.get("Authorization", "")
 
@@ -55,6 +55,6 @@ async def post_letter(request: Request, letter: Post):
         )
 
     return JSONResponse(
-        {"detail": "Posted", "id": letter_id},
+        {"detail": "Posted", "id": str(letter_id)},
         201
     )

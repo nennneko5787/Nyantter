@@ -1,0 +1,36 @@
+.content {
+    display: flex;
+}
+
+.navbar {
+    width: 20vw;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+}
+
+.navbar-btn, .navbar-profile {
+    transition: all 0.3s;
+    border: solid 10px;
+    border-radius: 10px;
+    margin: 1vw;
+    border-color: var(--background-color);
+}
+
+.navbar-profile {
+    width: calc(20vw - 2vw - 20px);
+    position: absolute;
+    bottom: 0;
+    display: flex;
+}
+
+.navbar-btn:hover, .navbar-profile:hover {
+    border-color: var(--border-color);
+    background-color: var(--border-color);
+}
+
+.icon_img {
+    border: solid 0px;
+    border-radius: 48px;
+}

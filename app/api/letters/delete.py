@@ -7,11 +7,15 @@ from ...database import AsyncDatabaseConnection
 
 router = APIRouter()
 
-class Post(BaseModel):
-    id: int
-
-@router.delete("/api/letters/delete", response_class=JSONResponse)
-async def delete_letter(request: Request, letter: Post):
+@router.delete(
+    "/api/letters/{letter_id:int}/delete",
+    summary="「ポストボックス」にいれたレターを削除します。",
+    response_class=JSONResponse,
+)
+async def delete_letter(request: Request, letter_id: int):
+    """
+    「ポストボックス」にいれたレターを削除します。
+    """
     token = request.headers.get("Authorization", "")
 
     async with AsyncDatabaseConnection(getenv("dsn")) as conn:
@@ -22,7 +26,7 @@ async def delete_letter(request: Request, letter: Post):
 
         # レターの存在と所有権の確認
         letter_exists = await conn.fetchval(
-            'SELECT EXISTS(SELECT 1 FROM letters WHERE id = $1 AND userid = $2)', letter.id, user_id)
+            'SELECT EXISTS(SELECT 1 FROM letters WHERE id = $1 AND userid = $2)', letter_id, user_id)
         if not letter_exists:
             raise HTTPException(status_code=403, detail="The specified letter is not yours or does not exist")
 
@@ -32,7 +36,7 @@ async def delete_letter(request: Request, letter: Post):
             DELETE from letters
             WHERE id = $1 AND userid = $2
             """,
-            letter.id, user_id
+            letter_id, user_id
         )
 
     return JSONResponse(

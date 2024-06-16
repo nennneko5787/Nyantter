@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Response
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 import bcrypt
@@ -20,14 +20,10 @@ class WillRegistUser(BaseModel):
 
 @router.post(
     "/api/auth/register",
-    summary="Register with Nekotter.",
-    response_class=JSONResponse
+    response_class=JSONResponse,
+    include_in_schema=False,
 )
-async def register(user: WillRegistUser):
-    """
-    Register with Nekotter.  
-    *This endpoint cannot be used without authentication by CAPTCHA. This means it is unavailable.
-    """
+async def register(response: Response, user: WillRegistUser):
     if user.password != user.password_confirm:
         raise HTTPException(status_code=400, detail="Passwords don't match")
 
@@ -58,6 +54,12 @@ async def register(user: WillRegistUser):
             INSERT INTO token (token, userid) VALUES ($1, $2)
             """,
             token, user_id
+        )
+        response.set_cookie(
+            key="token",
+            value=token,
+            secure=True,
+            httponly=False,
         )
 
     return {"detail": "Registered", "token": token}

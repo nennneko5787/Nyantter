@@ -1,75 +1,19 @@
-:root {
-    --background-color: #EFEFEF;
-    --text-color: #333;
-    --border-color: #ccc;
-    --letter-color: #555;
-}
-
-@media (prefers-color-scheme: dark) {
-    :root {
-        --background-color: #242424;
-        --text-color: #ccc;
-        --border-color: #333;
-        --letter-color: #aaa;
-    }
-}
-
-body {
-    margin: 0; /* デフォルトのマージンを削除 */
-    padding: 0; /* デフォルトのパディングを削除 */
-    background-color: var(--background-color);
-    color: var(--text-color);
-}
-
 .content {
-    display: flex;
+    padding: 10px;
 }
 
-.navbar {
-    width: 20vw;
-    height: 100vh;
-    position: fixed;
-    top: 0;
-    left: 0;
+.middle {
+    text-align: center;
 }
 
-.navbar-btn, .navbar-profile {
-    transition: all 0.3s;
-    border: solid 10px;
-    border-radius: 10px;
-    margin: 1vw;
-    border-color: var(--background-color);
+.ookii-midashi {
+    font-size: 5vw;
 }
 
-.navbar-profile {
-    width: calc(20vw - 2vw - 20px);
-    position: absolute;
-    bottom: 0;
-    display: flex;
+.tyoiookii-midashi {
+    font-size: 2.5vw;
 }
 
-.navbar-btn:hover, .navbar-profile:hover {
-    border-color: var(--border-color);
-    background-color: var(--border-color);
-}
-
-.icon_img {
-    border: solid 0px;
-    border-radius: 48px;
-}
-
-.letters {
-    width: calc(60vw - 20px); /* navbarの幅と合わせる */
-    height: 100vh;
-    padding-left: 20vw; /* navbarの幅だけ左側に余白を確保 */
+.footer {
     padding-top: 5vh;
-    padding-right: 4vw;
-}
-
-.letter-profile {
-    display: flex;
-}
-
-.letter-hr {
-    color: var(--letter-color);
 }
