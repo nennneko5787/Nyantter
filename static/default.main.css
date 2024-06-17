@@ -74,3 +74,6 @@ body {
     padding: 3px;
 }
 
+button[aria-disabled="true"] {
+  cursor: not-allowed;
+}
