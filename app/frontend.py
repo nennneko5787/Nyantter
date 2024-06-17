@@ -18,6 +18,11 @@ async def register(request: Request):
     context = {"request": request, "turnstile_sitekey": getenv("turnstile_sitekey")}
     return templates.TemplateResponse("register.html", context)
 
+@router.get("/login", response_class=HTMLResponse, include_in_schema=False)
+async def register(request: Request):
+    context = {"request": request}
+    return templates.TemplateResponse("login.html", context)
+
 @router.get("/home", response_class=HTMLResponse, include_in_schema=False)
 async def home(request: Request):
     context = {"request": request}
