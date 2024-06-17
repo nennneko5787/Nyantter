@@ -1,7 +1,7 @@
 from ...database import AsyncDatabaseConnection
 from ...generator import random_text
 from ...env import getenv
-from fastapi import APIRouter, HTTPException, Response
+from fastapi import APIRouter, HTTPException
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 import bcrypt
@@ -18,7 +18,7 @@ class WillLoginUser(BaseModel):
     response_class=JSONResponse,
     deprecated=True,
 )
-async def login(response: Response, user: WillLoginUser):
+async def login(user: WillLoginUser):
     """
     ユーザー名とパスワードを使用してログインします。
     ※このエンドポイントは**非推奨**です！代わりに提供される予定のOAuth2を使用してください！
@@ -40,11 +40,5 @@ async def login(response: Response, user: WillLoginUser):
             """,
             token, row["id"]
         )
-        response.set_cookie(
-            key="token",
-            value=token,
-            secure=True,
-            httponly=False,
-        )
 
-    return {"detail": "Logged in", "token": token}
+    return {"detail": "Logged in", "token": token, "userid": str(row["id"])}

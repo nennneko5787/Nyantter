@@ -1,6 +1,7 @@
 :root {
     --background-color: #EFEFEF;
     --text-color: #333;
+    --border-color: #555;
     --button-color: #ee82ee;
     --button-color-visited: #aa12aa;
     --button-hover-color: #ff93ff;
@@ -11,6 +12,7 @@
     :root {
         --background-color: #242424;
         --text-color: #ccc;
+        --border-color: #aaa;
         --button-color: #cc60cc;
         --button-hover-color: #ee71ee;
         --button-color-visited: #880088;
@@ -24,6 +26,10 @@ a:hover { color: var(--button-hover-color);; }
 a:active { color: var(--button-color-click); }
 
 body {
+    font-family: "Noto Sans JP", sans-serif;
+    font-optical-sizing: auto;
+    font-style: normal;
+
     background-color: var(--background-color);
     color: var(--text-color);
 }
@@ -50,3 +56,14 @@ body {
     background-color: var(--button-color-click);
     border-color: var(--button-color-click);
 }
+
+.center {
+    text-align: center;
+}
+
+.icon_img {
+    border: solid 0px;
+    border-radius: 48px;
+    padding: 3px;
+}
+

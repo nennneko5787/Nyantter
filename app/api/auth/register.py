@@ -1,14 +1,20 @@
-from fastapi import APIRouter, HTTPException, Response
+from fastapi import APIRouter, HTTPException
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 import bcrypt
 from snowflake import SnowflakeGenerator
 from datetime import datetime
+import re
 
 from ...database import AsyncDatabaseConnection
 from ...turnstile import verify_captcha
 from ...generator import random_text
 from ...env import getenv
+
+def name_check(username):
+    # ユーザー名に許可されている文字以外が含まれているかをチェックする正規表現
+    pattern = re.compile(r'[^a-zA-Z0-9_.-]')
+    return bool(pattern.search(username))
 
 router = APIRouter()
 
@@ -23,7 +29,13 @@ class WillRegistUser(BaseModel):
     response_class=JSONResponse,
     include_in_schema=False,
 )
-async def register(response: Response, user: WillRegistUser):
+async def register(user: WillRegistUser):
+    if name_check(user.name):
+        raise HTTPException(status_code=400, detail="Username contains invalid characters")
+    
+    if len(user.name) < 0 and len(user.name) > 14:
+        raise HTTPException(status_code=400, detail="Username must be at least 1 and no more than 14 characters long")
+
     if user.password != user.password_confirm:
         raise HTTPException(status_code=400, detail="Passwords don't match")
 
@@ -55,11 +67,5 @@ async def register(response: Response, user: WillRegistUser):
             """,
             token, user_id
         )
-        response.set_cookie(
-            key="token",
-            value=token,
-            secure=True,
-            httponly=False,
-        )
 
-    return {"detail": "Registered", "token": token}
+    return {"detail": "Registered", "token": token, "userid": str(user_id)}

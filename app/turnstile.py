@@ -1,11 +1,10 @@
 from .env import getenv
 import aiohttp
 
-async def verify_captcha(*, token: str, ipaddr: str) -> bool:
+async def verify_captcha(token: str) -> bool:
     data = {
         "secret": getenv("turnstile_secret"),
-        "response": token,
-        "ip": ipaddr
+        "response": token
     }
 
     async with aiohttp.ClientSession() as session:
