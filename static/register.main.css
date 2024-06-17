@@ -3,8 +3,12 @@
     border-color: var(--border-color);
     border-radius: 10px;
 
-    margin-left: 25%;
-    margin-right: 25%;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
 
     padding-top: 1%;
     padding-bottom: 1%;
