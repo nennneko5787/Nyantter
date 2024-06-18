@@ -73,7 +73,8 @@ window.addEventListener("message", function (e) {
 
     turnstileIframe.style.width = "100%";
     turnstileIframe.style.paddingBottom = "10px";
-    turnstileIframe.style.marginBottom = "10px";
+    turnstileIframe.style.margin = "10px";
+    turnstileIframe.style.marginLeft = "0px";
     turnstileIframe.style.display = "";
     e.stopImmediatePropagation();
 });
