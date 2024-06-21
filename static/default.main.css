@@ -70,6 +70,10 @@ body {
     text-align: center;
 }
 
+.left {
+    text-align: left;
+}
+
 .icon_img {
     border: solid 0px;
     border-radius: 48px;
