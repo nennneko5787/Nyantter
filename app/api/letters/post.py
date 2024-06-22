@@ -30,6 +30,11 @@ async def post_letter(request: Request, letter: WillPostLetter):
     - **relettered_to**: リレター先ポスト。  
     """
     token = request.headers.get("Authorization", "")
+    if letter.relettered_to is None and letter.content == "":
+        raise HTTPException(status_code=400, detail="content Required")
+    
+    if letter.relettered_to is not None and letter.replyed_to is not None:
+        raise HTTPException(status_code=400, detail="What is \"Relettered Reply\"?")
 
     async with AsyncDatabaseConnection(getenv("dsn")) as conn:
         # トークンの認証
@@ -41,6 +46,19 @@ async def post_letter(request: Request, letter: WillPostLetter):
         user_exists = await conn.fetchval('SELECT EXISTS(SELECT 1 FROM users WHERE id = $1)', user_id)
         if not user_exists:
             raise HTTPException(status_code=401, detail="User not found")
+
+        replyed_to = int(letter.replyed_to) if letter.replyed_to is not None else None
+        relettered_to = int(letter.relettered_to) if letter.relettered_to is not None else None
+
+        if replyed_to is not None:
+            letter_exists = await conn.fetchval('SELECT EXISTS(SELECT 1 FROM letters WHERE id = $1)', replyed_to)
+            if not letter_exists:
+                raise HTTPException(status_code=401, detail="Letter not found")
+        
+        if relettered_to is not None:
+            letter_exists = await conn.fetchval('SELECT EXISTS(SELECT 1 FROM letters WHERE id = $1)', relettered_to)
+            if not letter_exists:
+                raise HTTPException(status_code=401, detail="Letter not found")
 
         # レターIDの生成
         gen = SnowflakeGenerator(1, timestamp=int(datetime.now().timestamp()))
@@ -54,9 +72,6 @@ async def post_letter(request: Request, letter: WillPostLetter):
         content = re.sub(r'__(.*)__', r'<u>\1</u>', content)
         content = re.sub(r'\*(.*)\*', r'<i>\1</i>', content)
         content = re.sub(r'~~(.*)~~', r'<s>\1</s>', content)
-
-        replyed_to = int(letter.replyed_to) if letter.replyed_to is not None else None
-        relettered_to = int(letter.relettered_to) if letter.relettered_to is not None else None
 
         # レターの投稿
         await conn.execute(
