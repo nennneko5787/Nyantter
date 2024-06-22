@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100..900&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="/static/css/default.main.css">
+    <link rel="stylesheet" href="/static/css/register.main.css">
+    
+    <script src="/static/js/register.main.js" defer></script>
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+
+    <title>登録 / Nyantter</title>
+</head>
+<body>
+    <div class="dialog">
+        <div class="center">
+            <div class="dialog-title">
+                <b>Nyantterに登録</b>
+            </div>
+        </div>
+
+        <div class="dialog-content">
+            <label for="username">ユーザー名</label>
+            <input type="text" id="username" class="dialog-textbox" required />
+            <small id="usernameinvalid"></small>
+
+            <label for="password">パスワード</label>
+            <input type="password" id="password" class="dialog-textbox" required />
+            <small id="passwordinvalid"></small>
+
+            <label for="password_confirm">パスワード(確認)</label>
+            <input type="password" id="password_confirm" class="dialog-textbox" required />
+            <small id="password_confirm_invalid"></small>
+
+            <label for="cf-turnstile">人間としての証明を完了させてください</label>
+            <div class="cf-turnstile" data-sitekey="{{turnstile_sitekey}}"></div>
+            <small id="q.e.d"></small>
+
+            <button id="registerButton" class="button" style="width: 100%;" onclick="register();" disabled>
+                登録する
+            </button>
+            <small id="failed"></small>
+        </div>
+    </div>
+</body>
+</html>

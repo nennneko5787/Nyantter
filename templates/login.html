@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100..900&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="/static/css/default.main.css">
+    <link rel="stylesheet" href="/static/css/register.main.css">
+    
+    <script src="/static/js/login.main.js" defer></script>
+
+    <title>ログイン / Nyantter</title>
+</head>
+<body>
+    <div class="dialog">
+        <div class="center">
+            <div class="dialog-title">
+                <b>Nyantterへログイン</b>
+            </div>
+        </div>
+
+        <div class="dialog-content">
+            <label for="username">ユーザー名</label>
+            <input type="text" id="username" class="dialog-textbox" required />
+            <small id="usernameinvalid"></small>
+
+            <label for="password">パスワード</label>
+            <input type="password" id="password" class="dialog-textbox" required />
+
+            <button id="loginButton" class="button" style="width: 100%;" onclick="login();">
+                ログイン
+            </button>
+            <small id="failed"></small>
+        </div>
+    </div>
+</body>
+</html>

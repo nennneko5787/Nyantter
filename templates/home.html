@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100..900&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="/static/css/default.main.css">
+    <link rel="stylesheet" href="/static/css/home.main.css">
+    <link rel="stylesheet" href="/static/css/letters.main.css">
+
+    <script src="/static/js/home.main.js"></script>
+
+    <title>ホーム / Nyantter</title>
+</head>
+<body>
+    <div class="loading">
+        <div class="loading-img" style="text-align: center;">
+            Nyantter is loading<br>
+            ロゴがないんです、許してください...
+        </div>
+    </div>
+    
+    <div class="content">
+        <div class="navbar hidden">
+            <div class="navbar-btn" id="homeButton">
+                ホーム
+            </div>
+            <div class="navbar-btn">
+                検索
+            </div>
+            <div class="navbar-btn">
+                通知
+            </div>
+            <div class="navbar-btn">
+                設定
+            </div>
+            <div class="menu" id="menu">
+            </div>
+            <div id="navbar-profile" class="navbar-profile">
+                <div class="icon"><img id="me-icon" class="icon_img" src="" width="48" height="48"></div>
+                <div class="profile-name">
+                    <div id="account-display-name" class="account-display-name"></div>
+                    <div id="account-name" class="account-name"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="letters-content">
+            <h1 class="title" id="title">ホーム</h1>
+            <div class="letters" id="letters">
+                Now loading...
+            </div>
+            <div class="post-button hidden">
+                +
+            </div>
+        </div>
+    </div>
+
+    <div class="overlay" id="overlay"></div>
+    <div class="modal" id="modal">
+        <div class="modal-content">
+            <span class="close" id="close">&times;</span>
+            <h2>レターをポスト</h2>
+            <textarea id="postContent" rows="4" cols="50"></textarea>
+            <div class="button" id="postContentButton">ポスト</div>
+        </div>
+    </div>
+</body>
+</html>

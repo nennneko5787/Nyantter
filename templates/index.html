@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100..900&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="/static/css/default.main.css">
+    <link rel="stylesheet" href="/static/css/index.main.css">
+    <title>猫たちのためのSNS / Nyantter</title>
+    <script>
+    userToken = localStorage.getItem("token");
+
+    if (userToken !== null){
+        window.location.href = "/home";
+    }
+    </script>
+</head>
+<body>
+    <div class="content">
+        <div class="middle">
+            <h1 class="ookii-midashi">ここで、誰かを待ってみよう</h1>
+            <h2 class="tyoiookii-midashi">猫たちのためのSNS、Nyantter</h2>
+
+            <div class="button" onclick="window.location.href = '/register';">今すぐ登録</div>
+            <small>アカウントを登録することにより、Nyantterの<a href="/tos">利用規約</a>と<a href="/privacy">プライバシーポリシー</a>に同意したとみなされます。</small>
+            <div style="padding-top: 3vw;">登録済み？ <a href="/login">ログインしよう</a></div>
+        </div>
+
+        <div class="features">
+            <h2>Nyantterの機能</h2>
+            <div class="features-description">
+                <h3>レター(投稿)にリアクションをつける</h3>
+                <div class="features-description">
+                    レターにDiscordのようにリアクションをつけることができます。 <br>
+                    もちろん複数つけることができます。
+                </div>
+                <div style="margin-left: 25vw;">
+                    <h3 style="margin-left: 30vw;">レターを装飾する</h3>
+                    <div class="features-description">
+                        レターに色をつけたり文字を太くしたり、色々とできます。 <br>
+                        ※HTMLは使えません。
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <a href="/tos">利用規約</a> <a href="/privacy">プライバシーポリシー</a>
+        </div>
+    </div>
+</body>
+</html>

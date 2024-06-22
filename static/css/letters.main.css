@@ -1,0 +1,29 @@
+
+.letters {
+    width: calc(60vw - 20px); /* navbarの幅と合わせる */
+    height: 100vh;
+    padding-left: 20vw; /* navbarの幅だけ左側に余白を確保 */
+    padding-right: 4vw;
+}
+
+.letter-profile {
+    display: flex;
+}
+
+.letter {
+    margin: 2vw;
+}
+
+.letter-content {
+    margin-left: 1vw;
+}
+
+.letter-hr {
+    color: var(--letter-color);
+}
+
+
+.letter-actions {
+    display: flex;
+    padding: 5px;
+}

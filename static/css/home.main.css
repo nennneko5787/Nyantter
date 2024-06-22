@@ -1,0 +1,200 @@
+.loading {
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: var(--background-color);
+}
+
+.loading-img {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.content {
+    display: flex;
+}
+
+.navbar {
+    width: 20vw;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    user-select: none;
+}
+
+.navbar-btn, .navbar-profile {
+    transition: all 0.3s;
+    border: solid 10px;
+    border-radius: 10px;
+    margin: 1vw;
+    border-color: var(--background-color);
+    display: flex;
+}
+
+.navbar-profile {
+    width: calc(20vw - 2vw - 20px);
+    position: absolute;
+    bottom: 0;
+    display: flex;
+}
+
+.navbar-btn:hover, .navbar-profile:hover {
+    border-color: var(--border-color);
+    background-color: var(--border-color);
+}
+
+.menu {
+    position: absolute;
+    bottom: 20vh; /* navbar-btnの高さに合わせて調整 */
+    left: 1vw; /* 右寄せにする場合の例 */
+    background-color: var(--background-color);
+    box-shadow: 0px 8px 16px rgba(0,0,0,0.2);
+    z-index: 1;
+    display: none; /* 初期状態は非表示 */
+    transition: all 0.3s;
+    border: solid 10px;
+    border-radius: 10px;
+    border-color: var(--background-color);
+}
+  
+.menu.show {
+    display: block;
+}
+
+.hidden {
+    display: none; /* 要素を非表示にする */
+}
+
+.title {
+    padding-left: 20vw;
+    padding-right: 4vw;
+}
+
+.post-button {
+    width: 48px;
+    height: 48px;
+    background-color: var(--button-color);
+    border: solid 0px;
+    border-radius: 50%;
+    position: fixed;
+    bottom: 10%;
+    right: 20%;
+    display: flex; /* フレックスボックスを使用 */
+    justify-content: center; /* 水平方向（横方向）の中央揃え */
+    align-items: center; /* 垂直方向（縦方向）の中央揃え */
+    color: white;
+    user-select: none;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.post-button:hover {
+    background-color: var(--button-hover-color);
+}
+
+.post-button:active {
+    background-color: var(--button-color-click);
+    border-color: var(--button-color-click);
+}
+
+.post-button.hidden {
+    display: none !important;
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(8px);
+    z-index: 1000;
+    display: none;
+}
+
+.modal {
+    position: fixed;
+    top: 10%;
+    left: 50%;
+    transform: translate(-50%, -10%);
+    background-color: var(--background-color);
+    color: var(--text-color);
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    z-index: 1001;
+    display: none;
+}
+
+.modal-content {
+    text-align: center;
+}
+
+.close {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 30px;
+    cursor: pointer;
+    color: var(--border-color);
+}
+
+.close:hover,
+.close:focus {
+    color: var(--text-color);
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* The snackbar - position it at the bottom and in the middle of the screen */
+#snackbar {
+    visibility: hidden; /* Hidden by default. Visible on click */
+    min-width: 250px; /* Set a default minimum width */
+    margin-left: -125px; /* Divide value of min-width by 2 */
+    background-color: #333; /* Black background color */
+    color: #fff; /* White text color */
+    text-align: center; /* Centered text */
+    border-radius: 2px; /* Rounded borders */
+    padding: 16px; /* Padding */
+    position: fixed; /* Sit on top of the screen */
+    z-index: 1; /* Add a z-index if needed */
+    left: 50%; /* Center the snackbar */
+    bottom: 30px; /* 30px from the bottom */
+}
+
+/* Show the snackbar when clicking on a button (class added with JavaScript) */
+.show {
+    visibility: visible !important; /* Show the snackbar */
+
+/* Add animation: Take 0.5 seconds to fade in and out the snackbar.
+However, delay the fade out process for 2.5 seconds */
+    -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+    animation: fadein 0.5s, fadeout 0.5s 2.5s;
+}
+
+/* Animations to fade the snackbar in and out */
+@-webkit-keyframes fadein {
+    from {bottom: 0; opacity: 0;}
+    to {bottom: 30px; opacity: 1;}
+}
+
+@keyframes fadein {
+    from {bottom: 0; opacity: 0;}
+    to {bottom: 30px; opacity: 1;}
+}
+
+@-webkit-keyframes fadeout {
+    from {bottom: 30px; opacity: 1;}
+    to {bottom: 0; opacity: 0;}
+}
+
+@keyframes fadeout {
+    from {bottom: 30px; opacity: 1;}
+    to {bottom: 0; opacity: 0;}
+}
