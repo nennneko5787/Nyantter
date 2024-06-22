@@ -12,7 +12,11 @@ router = APIRouter()
     response_class=JSONResponse,
     include_in_schema=False,
 )
+<<<<<<< HEAD
 async def delete_letter(request: Request):
+=======
+async def delete_letter(request: Request,):
+>>>>>>> f12de26a8cc42a8924e75eb7d9b8c31711c2610c
     token = request.headers.get("Authorization", "")
 
     async with AsyncDatabaseConnection(getenv("dsn")) as conn:

@@ -1,0 +1,45 @@
+.dialog {
+    border: solid 1px;
+    border-color: var(--border-color);
+    border-radius: 10px;
+    
+    width: 80vw;
+    height: 90vh;
+
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateY(-50%) translateX(-50%);
+
+    margin: 10px;
+
+    padding-top: 1%;
+    padding-bottom: 1%;
+}
+
+.dialog-title {
+    padding: 10px;
+}
+
+.dialog-content {
+    padding: 10px;
+}
+
+label {
+    display: block;
+    margin-top: 1em;
+    font-size: 50%;
+}
+
+.dialog-textbox {
+    width: 98.7%;
+    height: 5vh;
+}
+
+.dialog-textbox:valid {
+    background-color: palegreen;
+}
+  
+.dialog-textbox:invalid {
+    background-color: lightpink;
+}

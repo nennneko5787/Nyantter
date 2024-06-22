@@ -1,0 +1,85 @@
+:root {
+    --background-color: #EFEFEF;
+    --text-color: #333;
+    --border-color: #555;
+    --button-color: #ee82ee;
+    --button-color-visited: #aa12aa;
+    --button-hover-color: #ff93ff;
+    --button-color-click: #f529f5;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --background-color: #242424;
+        --text-color: #ccc;
+        --border-color: #aaa;
+        --button-color: #cc60cc;
+        --button-hover-color: #ee71ee;
+        --button-color-visited: #880088;
+        --button-color-click: #e418e4;
+    }
+}
+
+a:link { color: var(--button-color); }
+a:visited { color: var(--button-color-visited); }
+a:hover { color: var(--button-hover-color);; }
+a:active { color: var(--button-color-click); }
+
+body {
+    font-family: "Noto Sans JP", sans-serif;
+    font-optical-sizing: auto;
+    font-style: normal;
+
+    background-color: var(--background-color);
+    color: var(--text-color);
+}
+
+.button {
+    text-align: center;
+    padding: 1vw;
+
+    color: #FFF;
+
+    background-color: var(--button-color);
+    border-color: var(--button-color);
+    
+    border: none;
+    border-radius: 10px;
+
+    user-select: none;
+
+    text-decoration: none;
+    cursor: pointer;
+    
+    padding: 8px 16px;
+    
+    margin: 2px;
+}
+
+.button:hover {
+    background-color: var(--button-hover-color);
+    border-color: var(--button-hover-color);
+}
+
+.button:active {
+    background-color: var(--button-color-click);
+    border-color: var(--button-color-click);
+}
+
+.center {
+    text-align: center;
+}
+
+.left {
+    text-align: left;
+}
+
+.icon_img {
+    border: solid 0px;
+    border-radius: 48px;
+    padding: 3px;
+}
+
+button[aria-disabled="true"] {
+  cursor: not-allowed;
+}
