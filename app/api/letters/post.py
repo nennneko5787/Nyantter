@@ -47,13 +47,13 @@ async def post_letter(request: Request, letter: WillPostLetter):
         letter_id = next(gen)
 
         content = re.sub(r'(\r\n|\r|\n)', '<br>\n', html.escape(letter.content))
-        content = re.sub(r'\$\[ruby\|(.*?)\|(.*?)\]', r'<ruby>\1<rp>(</rp><rt>\2</rt><rp>)</rp></ruby>', content)
-        content = re.sub(r'\$\[color=(.*?)\|(.*?)\]', r'<span style="color: \1">\2</span>', content)
-        content = re.sub(r'\$\[bgColor=(.*?)\|(.*?)\]', r'<span style="background-color: \1">\2</span>', content)
-        content = re.sub(r'\*\*(.*?)\*\*', r'<b>\1</b>', content)
-        content = re.sub(r'__(.*?)__', r'<u>\1</u>', content)
-        content = re.sub(r'\*(.*?)\*', r'<i>\1</i>', content)
-        content = re.sub(r'~~(.*?)~~', r'<s>\1</s>', content)
+        content = re.sub(r'\$\[ruby\|(.*)\|(.*)\]', r'<ruby>\1<rp>(</rp><rt>\2</rt><rp>)</rp></ruby>', content)
+        content = re.sub(r'\$\[color=(.*)\|(.*)\]', r'<span style="color: \1">\2</span>', content)
+        content = re.sub(r'\$\[bgColor=(.*)\|(.*)\]', r'<span style="background-color: \1">\2</span>', content)
+        content = re.sub(r'\*\*(.*)\*\*', r'<b>\1</b>', content)
+        content = re.sub(r'__(.*)__', r'<u>\1</u>', content)
+        content = re.sub(r'\*(.*)\*', r'<i>\1</i>', content)
+        content = re.sub(r'~~(.*)~~', r'<s>\1</s>', content)
 
         replyed_to = int(letter.replyed_to) if letter.replyed_to is not None else None
         relettered_to = int(letter.relettered_to) if letter.relettered_to is not None else None
