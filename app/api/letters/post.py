@@ -108,5 +108,5 @@ async def post_letter(request: Request, letter: WillPostLetter):
     log.info(f"{ipaddr} > posted {letter_id}")
     return JSONResponse(
         {"detail": "Posted", "id": str(letter_id)},
-        201
+        200
     )
