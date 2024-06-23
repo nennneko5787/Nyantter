@@ -9,7 +9,16 @@ from ...env import getenv
 from ...database import AsyncDatabaseConnection
 import re
 
+import logging
+
+log = logging.getLogger("uvicorn")
+
 router = APIRouter()
+
+def removeNonVisibleChars(text):
+    # Unicodeの範囲外の文字を削除する正規表現パターン
+    printable = re.compile(r'[^\u0020-\u007E\u00A0-\u024F\u1E00-\u1EFF]', re.UNICODE)
+    return printable.sub('', text)
 
 class WillPostLetter(BaseModel):
     content: str
@@ -29,6 +38,13 @@ async def post_letter(request: Request, letter: WillPostLetter):
     - **replyed_to**: 返信先ポスト。  
     - **relettered_to**: リレター先ポスト。  
     """
+    forwarded_for = request.headers.get('X-Forwarded-For')
+
+    if forwarded_for:
+        ipaddr = forwarded_for.split(',')[0]  # 複数のIPアドレスがカンマ区切りで送信される場合があるため、最初のものを取得
+    else:
+        ipaddr = request.client.host
+
     token = request.headers.get("Authorization", "")
     if letter.relettered_to is None and letter.content == "":
         raise HTTPException(status_code=400, detail="content Required")
@@ -36,7 +52,14 @@ async def post_letter(request: Request, letter: WillPostLetter):
     if letter.relettered_to is not None and letter.replyed_to is not None:
         raise HTTPException(status_code=400, detail="What is \"Relettered Reply\"?")
 
+    if len(letter.content) > 222:
+        raise HTTPException(status_code=413, detail="Content too large")
+
     async with AsyncDatabaseConnection(getenv("dsn")) as conn:
+        ipbanned = await conn.fetchrow('SELECT * FROM ban WHERE ipaddr = $1', ipaddr)
+        if ipbanned:
+            raise HTTPException(status_code=403, detail=f"IP address banned: {ipbanned['reason']} ({ipbanned['banned_at']})")
+
         # トークンの認証
         user_id = await conn.fetchval('SELECT userid FROM token WHERE token = $1', token)
         if not user_id:
@@ -64,14 +87,14 @@ async def post_letter(request: Request, letter: WillPostLetter):
         gen = SnowflakeGenerator(1, timestamp=int(datetime.now().timestamp()))
         letter_id = next(gen)
 
-        content = re.sub(r'(\r\n|\r|\n)', '<br>\n', html.escape(letter.content))
-        content = re.sub(r'(?i)\$\[ruby\|(.*?)\|(.*)\]', r'<ruby>\1<rp>(</rp><rt>\2</rt><rp>)</rp></ruby>', content)
-        content = re.sub(r'(?i)\$\[color=(.*?)\|(.*)\]', r'<span style="color: \1">\2</span>', content)
-        content = re.sub(r'(?i)\$\[bgColor=(.*?)\|(.*)\]', r'<span style="background-color: \1">\2</span>', content)
-        content = re.sub(r'\*\*(.*)\*\*', r'<b>\1</b>', content)
-        content = re.sub(r'__(.*)__', r'<u>\1</u>', content)
-        content = re.sub(r'\*(.*)\*', r'<i>\1</i>', content)
-        content = re.sub(r'~~(.*)~~', r'<s>\1</s>', content)
+        content = re.sub(r'(\r\n|\r|\n)', '<br>\n', html.escape(removeNonVisibleChars(letter.content)))
+        content = re.sub(r'(?i)\$\[ruby\|([^|]+)\|(.+)\]', r'<ruby>\1<rp>(</rp><rt>\2</rt><rp>)</rp></ruby>', content)
+        content = re.sub(r'(?i)\$\[color=([^|]+)\|(.+)\]', r'<span style="color: \1">\2</span>', content)
+        content = re.sub(r'(?i)\$\[bgColor=([^|]+)\|(.+)\]', r'<span style="background-color: \1">\2</span>', content)
+        content = re.sub(r'\*\*([^\*]+)\*\*', r'<b>\1</b>', content)
+        content = re.sub(r'__([^_]+)__', r'<u>\1</u>', content)
+        content = re.sub(r'\*([^\*]+)\*', r'<i>\1</i>', content)
+        content = re.sub(r'~~([^~]+)~~', r'<s>\1</s>', content)
 
         # レターの投稿
         await conn.execute(
@@ -82,6 +105,7 @@ async def post_letter(request: Request, letter: WillPostLetter):
             letter_id, user_id, content, replyed_to, relettered_to
         )
 
+    log.info(f"{ipaddr} > posted {letter_id}")
     return JSONResponse(
         {"detail": "Posted", "id": str(letter_id)},
         201

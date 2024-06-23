@@ -19,6 +19,10 @@ async def delete_letter(request: Request, letter_id: int):
     token = request.headers.get("Authorization", "")
 
     async with AsyncDatabaseConnection(getenv("dsn")) as conn:
+        ipbanned = await conn.fetchrow('SELECT * FROM ban WHERE ipaddr = $1', ipaddr)
+        if ipbanned:
+            raise HTTPException(status_code=403, detail=f"IP address banned: {ipbanned['reason']} ({ipbanned['banned_at']})")
+
         # トークンの認証とユーザーIDの取得
         user_id = await conn.fetchval('SELECT userid FROM token WHERE token = $1', token)
         if not user_id:

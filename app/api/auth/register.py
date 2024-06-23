@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Request
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 import bcrypt
@@ -10,6 +10,10 @@ from ...database import AsyncDatabaseConnection
 from ...turnstile import verify_captcha
 from ...generator import random_text
 from ...env import getenv
+
+import logging
+
+log = logging.getLogger("uvicorn")
 
 def name_check(username):
     # ユーザー名に許可されている文字以外が含まれているかをチェックする正規表現
@@ -29,7 +33,14 @@ class WillRegistUser(BaseModel):
     response_class=JSONResponse,
     include_in_schema=False,
 )
-async def register(user: WillRegistUser):
+async def register(request: Request, user: WillRegistUser):
+    forwarded_for = request.headers.get('X-Forwarded-For')
+
+    if forwarded_for:
+        ipaddr = forwarded_for.split(',')[0]  # 複数のIPアドレスがカンマ区切りで送信される場合があるため、最初のものを取得
+    else:
+        ipaddr = request.client.host
+
     if name_check(user.name):
         raise HTTPException(status_code=400, detail="Username contains invalid characters")
     
@@ -46,6 +57,10 @@ async def register(user: WillRegistUser):
     hashed_password = bcrypt.hashpw(user.password.encode(), salt).decode()
 
     async with AsyncDatabaseConnection(getenv("dsn")) as conn:
+        ipbanned = await conn.fetchrow('SELECT * FROM ban WHERE ipaddr = $1', ipaddr)
+        if ipbanned:
+            raise HTTPException(status_code=403, detail=f"IP address banned: {ipbanned['reason']} ({ipbanned['banned_at']})")
+
         if await conn.fetchval('SELECT EXISTS(SELECT 1 FROM users WHERE name = $1)', user.name):
             raise HTTPException(status_code=400, detail="User exists")
 
@@ -68,4 +83,5 @@ async def register(user: WillRegistUser):
             token, user_id
         )
 
+    log.info(f"{ipaddr} > registed {user.name} ({user_id})")
     return {"detail": "Registered", "token": token, "userid": str(user_id)}

@@ -1,6 +1,8 @@
 let userToken = "";
 let isLoggedIn = false;
 let userdata = {};
+let nowPage = 0;
+let isLoading = true;
 
 console.log(
     "%cNyantter %cby %cnennneko5787",
@@ -140,6 +142,16 @@ document.addEventListener("DOMContentLoaded", async () => {
     consoleWarning();
 });
 
+$(window).on('scroll', function(){
+    var docHeight = $(document).innerHeight(), //ドキュメントの高さ
+        windowHeight = $(window).innerHeight(), //ウィンドウの高さ
+        pageBottom = docHeight - windowHeight; //ドキュメントの高さ - ウィンドウの高さ
+    if(pageBottom <= $(window).scrollTop() && isLoading == false) {
+      nowPage += 1;
+      showHomeTimeLine(nowPage, true)
+    }
+});
+
 function reloadMeDetail() {
     let username = userdata['name'];
     let displayName = userdata['display_name'] || username;
@@ -179,13 +191,14 @@ function consoleWarning() {
 }
 
 // Paging
-async function showHomeTimeLine() {
+async function showHomeTimeLine(page = 0, notReplace = false) {
     let userCache = {};
+    isLoading = true;
 
     try {
         window.history.pushState({}, "", "/home");
 
-        const response = await fetch("/api/letters/timeline/latest", {
+        const response = await fetch("/api/letters/timeline/latest?page="+page, {
             method: "get",
         });
 
@@ -197,7 +210,7 @@ async function showHomeTimeLine() {
         const letters = json["letters"];
         console.log(letters);
         const lettersElement = document.getElementById("letters");
-        lettersElement.innerHTML = ""; // Clear previous elements
+        if (!notReplace) lettersElement.innerHTML = ""; // Clear previous elements
 
         for (const letter of letters) {
             let userData; // Variable to hold user data
@@ -248,7 +261,14 @@ async function showHomeTimeLine() {
             accountNameDiv.textContent = `@${userData.name}`;
             letterNameDiv.appendChild(displayNameDiv);
             letterNameDiv.appendChild(accountNameDiv);
+
+            const letterDate = document.createElement("div");
+            letterDate.className = "letter-date";
+            const pastDate = new Date(letter.created_at)
+            letterDate.innerHTML = timeAgo(pastDate);
+
             letterProfile.appendChild(letterNameDiv);
+            letterProfile.appendChild(letterDate);
 
             // Letter content
             const letterContent = document.createElement("div");
@@ -266,6 +286,7 @@ async function showHomeTimeLine() {
     } catch (error) {
         console.error('Error fetching letters:', error);
     }
+    isLoading = false;
 }
 
 async function showUserProfile(userid) {
@@ -284,6 +305,29 @@ async function showUserProfile(userid) {
 }
 
 // 各種処理
+function timeAgo(date) {
+    const seconds = Math.floor((Date.now() - date) / 1000);
+    
+    const intervals = [
+        { label: '年', seconds: 31536000 },
+        { label: 'ヶ月', seconds: 2592000 },
+        { label: '日', seconds: 86400 },
+        { label: '時間', seconds: 3600 },
+        { label: '分', seconds: 60 },
+        { label: '秒', seconds: 1 }
+    ];
+
+    for (let i = 0; i < intervals.length; i++) {
+        const interval = intervals[i];
+        const count = Math.floor(seconds / interval.seconds);
+        if (count >= 1) {
+            return count + interval.label + '前';
+        }
+    }
+
+    return 'たった今';
+}
+
 async function postContent(replyed_to = null, relettered_to = null) {
     try{
         if (document.getElementById('postContentButton').ariaDisabled){
