@@ -331,7 +331,8 @@ function timeAgo(date) {
 async function postContent(replyed_to = null, relettered_to = null) {
     try{
         if (document.getElementById('postContentButton').ariaDisabled == true){
-            return
+            alert("ariadisabled");
+            return;
         }
 
         let postContentElement = document.getElementById("postContent");
