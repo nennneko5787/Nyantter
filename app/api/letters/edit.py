@@ -4,6 +4,8 @@ from pydantic import BaseModel
 import html
 from ...env import getenv
 from ...database import AsyncDatabaseConnection
+import re
+import html
 
 router = APIRouter()
 
@@ -39,6 +41,15 @@ async def edit_letter(request: Request, letter_id: int, letter: WillEditPost):
         if not letter_exists:
             raise HTTPException(status_code=403, detail="The specified letter is not yours or does not exist")
 
+        content = re.sub(r'(\r\n|\r|\n)', '<br>\n', html.escape(letter.content))
+        content = re.sub(r'(?i)\$\[ruby\|([^|]+)\|(.+)\]', r'<ruby>\1<rp>(</rp><rt>\2</rt><rp>)</rp></ruby>', content)
+        content = re.sub(r'(?i)\$\[color=([^|]+)\|(.+)\]', r'<span style="color: \1">\2</span>', content)
+        content = re.sub(r'(?i)\$\[bgColor=([^|]+)\|(.+)\]', r'<span style="background-color: \1">\2</span>', content)
+        content = re.sub(r'\*\*([^\*]+)\*\*', r'<b>\1</b>', content)
+        content = re.sub(r'__([^_]+)__', r'<u>\1</u>', content)
+        content = re.sub(r'\*([^\*]+)\*', r'<i>\1</i>', content)
+        content = re.sub(r'~~([^~]+)~~', r'<s>\1</s>', content)
+
         # レターの編集
         await conn.execute(
             """
@@ -46,7 +57,7 @@ async def edit_letter(request: Request, letter_id: int, letter: WillEditPost):
             SET content = $1, edited_at = now()
             WHERE id = $2 AND userid = $3
             """,
-            html.escape(letter.content), letter_id, user_id
+            content, letter_id, user_id
         )
 
     return JSONResponse(
