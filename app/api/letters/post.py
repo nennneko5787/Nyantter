@@ -15,11 +15,6 @@ log = logging.getLogger("uvicorn")
 
 router = APIRouter()
 
-def removeNonVisibleChars(text):
-    # Unicodeの範囲外の文字を削除する正規表現パターン
-    printable = re.compile(r'[^\u0020-\u007E\u00A0-\u024F\u1E00-\u1EFF]', re.UNICODE)
-    return printable.sub('', text)
-
 class WillPostLetter(BaseModel):
     content: str
     replyed_to: Optional[Union[int, str]] = None
@@ -87,7 +82,7 @@ async def post_letter(request: Request, letter: WillPostLetter):
         gen = SnowflakeGenerator(1, timestamp=int(datetime.now().timestamp()))
         letter_id = next(gen)
 
-        content = re.sub(r'(\r\n|\r|\n)', '<br>\n', html.escape(removeNonVisibleChars(letter.content)))
+        content = re.sub(r'(\r\n|\r|\n)', '<br>\n', html.escape(letter.content))
         content = re.sub(r'(?i)\$\[ruby\|([^|]+)\|(.+)\]', r'<ruby>\1<rp>(</rp><rt>\2</rt><rp>)</rp></ruby>', content)
         content = re.sub(r'(?i)\$\[color=([^|]+)\|(.+)\]', r'<span style="color: \1">\2</span>', content)
         content = re.sub(r'(?i)\$\[bgColor=([^|]+)\|(.+)\]', r'<span style="background-color: \1">\2</span>', content)
