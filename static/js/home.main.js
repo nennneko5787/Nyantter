@@ -127,6 +127,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         
         postContentButton.addEventListener('click', async function() {
             await postContent();
+            return true;
         })
     }
 
