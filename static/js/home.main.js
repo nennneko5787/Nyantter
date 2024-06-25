@@ -329,51 +329,50 @@ function timeAgo(date) {
 }
 
 async function postContent(replyed_to = null, relettered_to = null) {
-    try{
-        if (document.getElementById('postContentButton').ariaDisabled == true){
-            alert("ariadisabled");
+    try {
+        if (document.getElementById('postContentButton').ariaDisabled == "true") {
+            alert("投稿ボタンは無効です");
             return;
         }
 
         let postContentElement = document.getElementById("postContent");
         let postContentValue = postContentElement.value;
         postContentElement.readOnly = true;
-        document.getElementById('postContentButton').ariaDisabled = true;
+        document.getElementById('postContentButton').setAttribute('ariaDisabled', "true");
 
-        body = {
+        let body = {
             content: postContentValue,
             replyed_to: replyed_to,
             relettered_to: relettered_to
-        }
+        };
 
-        let response = await fetch(
-            "/api/letters",
-            {
-                method: "POST",
-                headers: {
-                    "Authorization": userToken,
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(body)
-            }
-        )
+        let response = await fetch("/api/letters", {
+            method: "POST",
+            headers: {
+                "Authorization": userToken,
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(body)
+        });
 
         if (!response.ok) {
             throw new Error('Network response was not ok');
         }
 
         const data = await response.json();
+        postContentElement.readOnly = false;
+        document.getElementById('postContentButton').setAttribute('ariaDisabled', "false");
+        postContentElement.value = "";
+
+        // モーダルとオーバーレイの表示をリセット
         overlay.style.display = 'none';
         modal.style.display = 'none';
-        showSnackBar("レターをポストしました。")
-        postContentElement.readOnly = false;
-        document.getElementById('postContentButton').ariaDisabled = false;
-        postContentElement.value = "";
+
+        showSnackBar("レターをポストしました。");
         await showHomeTimeLine();
-        return;
     } catch (error) {
         postContentElement.readOnly = false;
-        document.getElementById('postContentButton').ariaDisabled = false;
+        document.getElementById('postContentButton').setAttribute('ariaDisabled', "false");
         console.error('Error fetching letters:', error);
     }
 }
