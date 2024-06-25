@@ -47,7 +47,7 @@ async def login(request: Request, user: WillLoginUser):
         if not bcrypt.checkpw(user.password.encode(), row["password"].encode()):
             raise HTTPException(status_code=403, detail="Username or password incorrect")
 
-        if row.get("isfreezing", false):
+        if row.get("isfreezing", False):
             raise HTTPException(status_code=403, detail="Account is freezing")
 
         token = random_text(46)
